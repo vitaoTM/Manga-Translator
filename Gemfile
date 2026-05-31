@@ -59,4 +59,14 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "dotenv-rails"
+  gem "minitest-reporters"
+  gem "webmock"
+  gem "mocha"
 end
+
+gem "anthropic", "~> 1.44.0"
+gem "ruby-openai"
+gem "faraday"
+
+gem "herb", "~> 0.10.1"

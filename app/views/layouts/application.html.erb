@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Image Translator" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Image Translator">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Translate Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+      <%= csrf_meta_tags %>
+      <%= csp_meta_tag %>
+      <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+      <%= javascript_importmap_tags %>
   </head>
-
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="h-full bg-stone-950 text-stone-100 font-['IBM_Plex_Mono',monospace]">
+    <header class="border-b border-stone-800 px-6 py-4 flex items-center justify-between">
+      <a href="/" class="font-['Syne',sans-serif] text-2xl font-black tracking-tight text-amber-400">
+        TRANSLATE<span class="text-stone-400">LENS</span>
+      </a>
+      <%= link_to "New Batch", new_translation_batch_path,
+            class: "text-xs border border-amber-400 text-amber-400 px-4 py-2 hover:bg-amber-400 hover:text-stone-950 transition-colors" %>
+    </header>
+    <main class="max-w-6xl mx-auto px-6 py-10">
+      <% if notice %>
+        <div class="mb-6 border border-green-500 bg-green-950 text-green-300 text-xs px-4 py-3"><%= notice %></div>
+      <% end %>
+      <% if alert %>
+        <div class="mb-6 border border-red-500 bg-red-950 text-red-300 text-xs px-4 py-3"><%= alert %></div>
+      <% end %>
       <%= yield %>
     </main>
   </body>
