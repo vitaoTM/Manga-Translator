@@ -6,13 +6,13 @@ class TranslateImageJob < ApplicationJob
     return if job.status_completed?
 
     job.update!(status: :processing)
-    ImageTranslationService.new(job).call
+    ImageTranslationService.call(job)
 
     batch = job.translation_batch
-    if batch.translation_jobs.all? { |j| j.status_completed? || j.status_failed? }
+    if batch.translation_jobs.reload.all? { |j| j.status_completed? || j.status_failed? }
       batch.update!(status: :completed)
     end
   rescue ActiveRecord::RecordNotFound
-    Rails.logger.warn "TranslationJob #{translation_job_id} not found"
+    Rails.logger.warn "TranslateImageJob: TranslationJob ##{translation_job_id} not found"
   end
 end

@@ -1,0 +1,23 @@
+ <div data-controller="batch-poller"
+      data-batch-poller-batch-id-value="<%= @batch.id %>"
+      data-batch-poller-completed-value="<%= @batch.status_completed? || @batch.status_failed? %>">
+
+  <div class="flex items-start justify-between mb-8">
+    <div>
+      <h1 class="font-['Syne',sans-serif] text-3xl font-black"><%= @batch.title %></h1>
+      <p class="text-stone-500 text-xs mt-1">
+        <%= @jobs.size %> image(s) · <%= @batch.ai_model %> ·
+        Created <%= time_ago_in_words(@batch.created_at) %> ago
+      </p>
+    </div>
+    <span class="text-xs px-3 py-1 border <%= status_badge_classes(@batch.status) %>">
+      <%= @batch.status.upcase %>
+    </span>
+  </div>
+
+  <div class="space-y-6">
+    <% @jobs.each do |job| %>
+      <%= render "translation_job", job: job %>
+    <% end %>
+  </div>
+</div>

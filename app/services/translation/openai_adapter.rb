@@ -5,7 +5,7 @@ module Translation
 
       response = client.chat(
         parameters: {
-          model:      @job.translation_batch.model_name,
+          model:      @job.translation_batch.ai_model,
           max_tokens: 2048,
           messages: [ {
             role: "user",

@@ -1,0 +1,47 @@
+<div
+  id="job-<%= job.id %>"
+  class="border border-stone-800 grid grid-cols-2 gap-0"
+>
+  <div class="border-r border-stone-800 p-4 bg-stone-900">
+    <% if job.image.attached? %>
+      <%= image_tag job.image, class: "w-full object-contain max-h-96" %>
+    <% end %>
+
+    <p class="text-xs text-stone-600 mt-2">Image #<%= job.position + 1 %></p>
+  </div>
+
+  <div class="p-6 flex flex-col justify-between">
+    <div>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-xs px-2 py-0.5 border <%= status_badge_classes(job.status) %>">
+          <%= job.status.upcase %>
+        </span>
+
+        <% if job.source_language.present? %>
+          <span class="text-xs text-stone-500">
+            from <%= job.source_language %>
+          </span>
+        <% end %>
+      </div>
+
+      <% if job.status_completed? %>
+        <div class="text-sm leading-relaxed text-stone-300 whitespace-pre-wrap"><%= job.translated_text %></div>
+        <% if job.error_message.present? %>
+          <p class="text-xs text-stone-500 mt-4 border-t border-stone-800 pt-4">
+            📝 <%= job.error_message %>
+          </p>
+        <% end %>
+      <% elsif job.status_failed? %>
+        <p class="text-sm text-red-400">
+          Translation failed: <%= job.error_message %>
+        </p>
+      <% elsif job.status_processing? %>
+        <div class="flex items-center gap-2 text-amber-400 text-sm">
+          <span class="animate-spin">◌</span> Translating...
+        </div>
+      <% else %>
+        <p class="text-sm text-stone-600">Queued...</p>
+      <% end %>
+    </div>
+  </div>
+</div>

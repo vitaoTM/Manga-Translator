@@ -3,7 +3,7 @@ module Translation
     BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models"
 
     def call
-      model = @job.translation_batch.model_name
+      model = @job.translation_batch.ai_model
       apikey = ENV.fetch("GEMINI_API_KEY")
       url = "#{BASE_URL}/#{model}:generateContent?key=#{apikey}"
 

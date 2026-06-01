@@ -1,0 +1,32 @@
+<div class="flex items-center justify-between mb-10">
+  <h1 class="font-['Syne',sans-serif] text-4xl font-black">Translation Batches</h1>
+</div>
+
+<% if @batches.empty? %>
+  <div class="border border-dashed border-stone-700 p-16 text-center">
+    <p class="text-stone-500 mb-4">No batches yet.</p>
+    <%= link_to "Upload your first batch →", new_translation_batch_path,
+          class: "text-amber-400 text-sm hover:underline" %>
+  </div>
+<% else %>
+  <div class="space-y-3">
+    <% @batches.each do |batch| %>
+      <%= link_to translation_batch_path(batch),
+            class: "block border border-stone-800 p-5 hover:border-stone-600 transition-colors" do %>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-bold text-sm"><%= batch.title %></p>
+            <p class="text-xs text-stone-500 mt-1">
+              <%= batch.translation_jobs.size %> image(s) ·
+              <%= batch.ai_model %> ·
+              <%= time_ago_in_words(batch.created_at) %> ago
+            </p>
+          </div>
+          <span class="text-xs px-3 py-1 border <%= status_badge_classes(batch.status) %>">
+            <%= batch.status.upcase %>
+          </span>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

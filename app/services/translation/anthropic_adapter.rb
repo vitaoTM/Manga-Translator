@@ -1,10 +1,10 @@
 module Translation
   class AnthropicAdapter < BaseAdapter
     def call
-      client = Anthropic::Client.new(api_key: ENV.fetch("ANTHROPIC_API_KEY"))
+      client = Anthropic::Client.new
 
-      response = client.messages(
-        model: @job.translation_batch.model_name,
+      response = client.messages.create(
+        model: @job.translation_batch.ai_model,
         max_tokens: 2048,
         messages: [ {
           role: "user",
@@ -19,10 +19,8 @@ module Translation
 
     rescue JSON::ParserError => e
       save_error("JSON parse error: {e.message}")
-    rescue Anthropic::Error => e
-      save_error("Anthropic API Error: #{e.message}")
     rescue => e
-      save_error("Unexpected error: #{e.message}")
+      save_error("Anthropic API Error: #{e.message}")
     end
   end
 end

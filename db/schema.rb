@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_31_020436) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_01_030940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,8 +43,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_31_020436) do
   end
 
   create_table "translation_batches", force: :cascade do |t|
+    t.string "ai_model", default: "claude-sonnet-4-20250514", null: false
     t.datetime "created_at", null: false
-    t.string "model_name", default: "claude-sonnet-4-20250514", null: false
     t.string "model_provider", default: "anthropic", null: false
     t.integer "status", default: 0, null: false
     t.string "title"
