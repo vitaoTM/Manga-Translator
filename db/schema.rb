@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_01_030940) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_02_175329) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_01_030940) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "speech_bubbles", force: :cascade do |t|
+    t.float "bbox_h", null: false
+    t.float "bbox_w", null: false
+    t.float "bbox_x", null: false
+    t.float "bbox_y", null: false
+    t.float "confidence", default: 0.0, null: false
+    t.datetime "created_at", null: false
+    t.integer "position", default: 0, null: false
+    t.text "raw_text"
+    t.text "translated_text"
+    t.bigint "translation_job_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["translation_job_id", "position"], name: "index_speech_bubbles_on_translation_job_id_and_position"
+    t.index ["translation_job_id"], name: "index_speech_bubbles_on_translation_job_id"
+  end
+
   create_table "translation_batches", force: :cascade do |t|
     t.string "ai_model", default: "claude-sonnet-4-20250514", null: false
     t.datetime "created_at", null: false
@@ -52,6 +68,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_01_030940) do
   end
 
   create_table "translation_jobs", force: :cascade do |t|
+    t.integer "bubble_count", default: 0, null: false
+    t.integer "bubble_detection_status", default: 0, null: false
     t.datetime "created_at", null: false
     t.string "error_message"
     t.integer "position", default: 0, null: false
@@ -65,5 +83,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_01_030940) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "speech_bubbles", "translation_jobs"
   add_foreign_key "translation_jobs", "translation_batches"
 end
