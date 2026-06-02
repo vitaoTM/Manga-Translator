@@ -67,6 +67,8 @@ group :development, :test do
   gem "mocha"
 end
 
+gem "onnxruntime"
+gem "mini_magick"
 gem "anthropic", "~> 1.44.0"
 gem "ruby-openai"
 gem "faraday"

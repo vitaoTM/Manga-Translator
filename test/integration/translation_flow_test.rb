@@ -12,7 +12,7 @@ class TranslationFlowTest < ActionDispatch::IntegrationTest
       title:          "Integration test batch",
       model_provider: "anthropic",
       model_name:     "claude-sonnet-4-20250514",
-      images:         [image]
+      images:         [ image ]
     }
 
     batch = TranslationBatch.last
