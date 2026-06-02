@@ -18,9 +18,11 @@ module Translation
       save_result(parse_json(response.content.first.text))
 
     rescue JSON::ParserError => e
-      save_error("JSON parse error: {e.message}")
+      save_error("JSON parse error: #{e.message}")
+    rescue Anthropic::Error => e
+      save_error("Anthropic API error: #{e.message}")
     rescue => e
-      save_error("Anthropic API Error: #{e.message}")
+      save_error("Unexpected error: #{e.message}")
     end
   end
 end

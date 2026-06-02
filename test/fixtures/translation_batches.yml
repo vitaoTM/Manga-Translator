@@ -1,0 +1,5 @@
+batch_one:
+  title: "Test Batch"
+  status: 0
+  model_provider: "anthropic"
+  ai_model: "claude-sonnet-4-20250514"

@@ -1,0 +1,4 @@
+job_one:
+  translation_batch: batch_one
+  status: 0
+  position: 0

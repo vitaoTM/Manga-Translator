@@ -57,9 +57,11 @@ group :development, :test do
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem "dotenv-rails"
+end
+
+group :development, :test do
   gem "minitest-reporters"
   gem "webmock"
   gem "mocha"
