@@ -1,46 +1,94 @@
-<div
-  id="job-<%= job.id %>"
-  class="border border-stone-800 grid grid-cols-2 gap-0"
->
-  <div class="border-r border-stone-800 p-4 bg-stone-900">
-    <% if job.image.attached? %>
-      <%= image_tag job.image, class: "w-full object-contain max-h-96" %>
-    <% end %>
+<div id="job-<%= job.id %>" class="border border-stone-800">
+  <div class="flex items-center justify-between px-6 py-3 border-b border-stone-800 bg-stone-900">
+    <div class="flex items-center gap-3">
+      <span class="text-xs px-2 py-0.5 border <%= status_badge_classes(job.status) %>">
+        <%= job.status.upcase %>
+      </span>
 
-    <p class="text-xs text-stone-600 mt-2">Image #<%= job.position + 1 %></p>
+      <% if job.source_language.present? %>
+        <span class="text-xs text-stone-500">
+          from <%= job.source_language %>
+        </span>
+      <% end %>
+
+      <% if job.bubble_count > 0 %>
+        <span class="text-xs text-stone-500">
+          <%= job.bubble_count %> bubble<%= job.bubble_count == 1 ? "" : "s" %>
+          detected
+        </span>
+      <% end %>
+    </div>
+
+    <span class="text-xs text-stone-600">Image #<%= job.position + 1 %></span>
   </div>
 
-  <div class="p-6 flex flex-col justify-between">
-    <div>
-      <div class="flex items-center gap-3 mb-4">
-        <span class="text-xs px-2 py-0.5 border <%= status_badge_classes(job.status) %>">
-          <%= job.status.upcase %>
-        </span>
+  <div class="grid grid-cols-2 gap-0">
+    <div class="border-r border-stone-800 p-4 bg-stone-900"
+      <% if job.rendered_image.attached? %>
+        data-controller="image-toggle"
+      <% end %>
+    >
+      <% if job.rendered_image.attached? %>
+        <div class="flex gap-2 mb-3">
+          <button
+            data-action="click->image-toggle#showOriginal"
+            data-image-toggle-target="originalBtn"
+            class="
+              text-xs px-3 py-1 border border-stone-600 text-stone-400
+              hover:border-amber-400 hover:text-amber-400 transition-colors
+            ">
+            Original
+          </button>
 
-        <% if job.source_language.present? %>
-          <span class="text-xs text-stone-500">
-            from <%= job.source_language %>
-          </span>
+          <button
+            data-action="click->image-toggle#showTranslated"
+            data-image-toggle-target="translatedBtn"
+            class="
+              text-xs px-3 py-1 border border-amber-400 text-amber-400
+              bg-amber-400/10
+            ">
+            Translated ✓
+          </button>
+        </div>
+        <div data-image-toggle-target="originalView" class="hidden">
+          <%= image_tag job.image, class: "w-full object-contain max-h-96", alt: "" %>
+        </div>
+        <div data-image-toggle-target="translatedView">
+          <%= image_tag job.rendered_image, class: "w-full object-contain max-h-96", alt: "" %>
+        </div>
+      <% elsif job.image.attached? %>
+        <%= image_tag job.image, class: "w-full object-contain max-h-96", alt: "" %>
+      <% end %>
+    </div>
+
+    <div class="p-6 flex flex-col gap-6">
+      <div>
+        <p class="text-xs text-stone-500 mb-2 uppercase tracking-wide">
+          Full page translation
+        </p>
+
+        <% if job.status_completed? && job.translated_text.present? %>
+          <div class="text-sm leading-relaxed text-stone-300 whitespace-pre-wrap"><%= job.translated_text %></div>
+          <% if job.error_message.present? %>
+            <p class="text-xs text-stone-500 mt-3 border-t border-stone-800 pt-3">
+              <%= job.error_message %>
+            </p>
+          <% end %>
+        <% elsif job.status_failed? %>
+          <p class="text-sm text-red-400">
+            Translation failed: <%= job.error_message %>
+          </p>
+        <% elsif job.status_processing? %>
+          <div class="flex items-center gap-2 text-amber-400 text-sm">
+            <span class="animate-spin">◌</span> Translating...
+          </div>
+        <% else %>
+          <p class="text-sm text-stone-600">Queued...</p>
         <% end %>
       </div>
 
-      <% if job.status_completed? %>
-        <div class="text-sm leading-relaxed text-stone-300 whitespace-pre-wrap"><%= job.translated_text %></div>
-        <% if job.error_message.present? %>
-          <p class="text-xs text-stone-500 mt-4 border-t border-stone-800 pt-4">
-            📝 <%= job.error_message %>
-          </p>
-        <% end %>
-      <% elsif job.status_failed? %>
-        <p class="text-sm text-red-400">
-          Translation failed: <%= job.error_message %>
-        </p>
-      <% elsif job.status_processing? %>
-        <div class="flex items-center gap-2 text-amber-400 text-sm">
-          <span class="animate-spin">◌</span> Translating...
-        </div>
-      <% else %>
-        <p class="text-sm text-stone-600">Queued...</p>
+      <% if job.speech_bubbles.any? %>
+        <%= render "bubble_details", job: job %>
       <% end %>
     </div>
   </div>

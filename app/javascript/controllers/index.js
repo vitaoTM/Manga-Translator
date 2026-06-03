@@ -6,7 +6,11 @@ import { application } from "controllers/application"
 import DropzoneController      from "controllers/dropzone_controller"
 import ModelSelectorController from "controllers/model_selector_controller"
 import BatchPollerController   from "controllers/batch_poller_controller"
+import ImageToggleController   from "controllers/image_toggle_controller"
+import CollapsibleController   from "controllers/collapsible_controller"
 
 application.register("dropzone",       DropzoneController)
 application.register("model-selector", ModelSelectorController)
 application.register("batch-poller",   BatchPollerController)
+application.register("image-toggle",   ImageToggleController)
+application.register("collapsible",    CollapsibleController)

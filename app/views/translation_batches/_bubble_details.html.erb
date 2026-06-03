@@ -1,0 +1,40 @@
+<div data-controller="collapsible">
+  <button
+    data-action="click->collapsible#toggle"
+    class="
+      flex items-center gap-2 text-xs text-stone-500 hover:text-stone-300
+      transition-colors w-full text-left">
+    <span data-collapsible-target="icon" class="transition-transform">▶</span>
+    Speech bubble breakdown (<%= job.speech_bubbles.count %>
+    bubble<%= job.speech_bubbles.count == 1 ? "" : "s" %>)
+  </button>
+
+  <div data-collapsible-target="body" class="hidden mt-3 space-y-3">
+    <% job.speech_bubbles.ordered.each do |bubble| %>
+      <div class="border border-stone-800 p-3 text-xs">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-stone-600">#<%= bubble.position + 1 %></span>
+
+          <span class="text-stone-600">
+            conf: <%= (bubble.confidence * 100).round %>%
+          </span>
+        </div>
+
+        <% if bubble.raw_text.present? %>
+          <div class="mb-1">
+            <span class="text-stone-500">Original: </span>
+            <span class="text-stone-400"><%= bubble.raw_text %></span>
+          </div>
+        <% end %>
+
+        <div>
+          <span class="text-stone-500">EN: </span>
+
+          <span class="text-stone-200">
+            <%= bubble.translated_text.presence || "(empty)" %>
+          </span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
