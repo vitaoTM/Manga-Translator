@@ -102,10 +102,10 @@ class BubbleDetectionService
     return [] if candidates.empty?
 
     boxes = candidates.map do |d|
-      cx_1024 = d[0] * size
-      cy_1024 = d[1] * size
-      w_1024  = d[2] * size
-      h_1024  = d[3] * size
+      cx_1024 = d[0]
+      cy_1024 = d[1]
+      w_1024  = d[2]
+      h_1024  = d[3]
 
       cx_orig = (cx_1024 - pad_x) / scale
       cy_orig = (cy_1024 - pad_y) / scale
