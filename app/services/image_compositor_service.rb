@@ -1,3 +1,5 @@
+require "open3"
+
 class ImageCompositorService
   MIN_FONT_SIZE = 8
   MAX_FONT_SIZE = 32
@@ -84,16 +86,16 @@ class ImageCompositorService
   end
 
   def measure_text(text, font_size)
-    result = MiniMagick::Tool::Convert.new do |c|
-      c.font      ML_MODELS[:noto_font]
-      c.pointsize font_size
-      c.format    "%wx%h"
-      c << "label:#{text.gsub(/"/, '\\"')}"
-      c << "info:"
-    end
-    parts = result.split("x").map(&:to_i)
+    out, = Open3.capture2(
+      "magick",
+      "-font",      ML_MODELS[:noto_font],
+      "-pointsize", font_size.to_s,
+      "-format",    "%wx%h",
+      "label:#{text}",
+      "info:"
+    )
+    parts = out.strip.split("x").map(&:to_i)
     [ parts[0].to_i, parts[1].to_i ]
-
   rescue
     [ 999, 999 ]
   end
