@@ -60,6 +60,7 @@ class BubbleTranslationService
 
     crop_path = Rails.root.join("tmp", "bubble_crop_#{bubble.id}.png").to_s
     img.crop("#{px[:w]}x#{px[:h]}+#{px[:x]}+#{px[:y]}")
+    img.format("png")
     img.write(crop_path)
     crop_path
   end
