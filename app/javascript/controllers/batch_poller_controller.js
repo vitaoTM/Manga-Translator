@@ -1,4 +1,4 @@
- import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { batchId: Number, completed: Boolean }
@@ -22,7 +22,7 @@ export default class extends Controller {
       const data = await res.json()
       if (data.completed) {
         clearInterval(this.timer)
-        window.location.reload()
+        Turbo.visit(window.location.href)
       }
     } catch (e) {
       console.warn("Polling error:", e)

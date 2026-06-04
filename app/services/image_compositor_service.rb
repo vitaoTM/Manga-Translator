@@ -2,7 +2,7 @@ require "open3"
 
 class ImageCompositorService
   MIN_FONT_SIZE = 8
-  MAX_FONT_SIZE = 32
+  MAX_FONT_SIZE = 48
   TEXT_PADDING  = 4
 
   def initialize(translation_job)
@@ -44,37 +44,56 @@ class ImageCompositorService
 
   def draw_translation(img, bubble, img_w, img_h)
     px = bubble.pixel_bbox(img_w, img_h)
+    cx = px[:x] + px[:w] / 2
+    cy = px[:y] + px[:h] / 2
 
     img.combine_options do |c|
       c.fill "white"
-      c.draw "rectangle #{px[:x]},#{px[:y]} #{px[:x] + px[:w]},#{px[:y] + px[:h]}"
+      c.draw "ellipse #{cx},#{cy} #{px[:w] / 2},#{px[:h] / 2} 0,360"
     end
 
-    text      = bubble.translated_text
-    font_size = fit_font_size(text, px[:w], px[:h])
-    return if font_size < MIN_FONT_SIZE
+    text_w = [ (px[:w] * 0.70).round, 30 ].max
+    text_h = [ (px[:h] * 0.70).round, 30 ].max
+    text_x = [ cx - text_w / 2, 0 ].max
+    text_y = [ cy - text_h / 2, 0 ].max
 
-    text_x = px[:x] + TEXT_PADDING
-    text_y = px[:y] + font_size + TEXT_PADDING
+    text_img_path = Rails.root.join("tmp", "text_#{bubble.id}.png").to_s
 
-    img.combine_options do |c|
-      c.font      ML_MODELS[:noto_font]
-      c.fill      "black"
-      c.pointsize font_size
-      c.size      "#{px[:w] - TEXT_PADDING * 2}x#{px[:h] - TEXT_PADDING * 2}"
-      c.annotate  "+#{text_x}+#{text_y}", text
-    end
+    Open3.capture2(
+      "magick",
+      "-size",       "#{text_w}x#{text_h}",
+      "-background", "white",
+      "-fill",       "black",
+      "-font",       ML_MODELS[:noto_font],
+      "-gravity",    "Center",
+      "caption:#{bubble.translated_text}",
+      text_img_path
+    )
+
+    return unless File.exist?(text_img_path)
+
+    Open3.capture2(
+      "magick", "composite",
+      "-geometry", "+#{text_x}+#{text_y}",
+      text_img_path,
+      img.path,
+      img.path
+    )
+  ensure
+    File.delete(text_img_path) if text_img_path && File.exist?(text_img_path)
   end
 
   def fit_font_size(text, max_w, max_h)
+    avail_w = max_w - TEXT_PADDING * 2
+    avail_h = max_h - TEXT_PADDING * 2
     low  = MIN_FONT_SIZE
     high = MAX_FONT_SIZE
     best = low
 
     while low <= high
       mid = (low + high) / 2
-      w, h = measure_text(text, mid)
-      if w <= max_w - TEXT_PADDING * 2 && h <= max_h - TEXT_PADDING * 2
+      _w, h = measure_text(text, mid, avail_w)
+      if h <= avail_h
         best = mid
         low  = mid + 1
       else
@@ -85,15 +104,11 @@ class ImageCompositorService
     best
   end
 
-  def measure_text(text, font_size)
-    out, = Open3.capture2(
-      "magick",
-      "-font",      ML_MODELS[:noto_font],
-      "-pointsize", font_size.to_s,
-      "-format",    "%wx%h",
-      "label:#{text}",
-      "info:"
-    )
+  def measure_text(text, font_size, avail_w = nil)
+    args = [ "magick", "-font", ML_MODELS[:noto_font], "-pointsize", font_size.to_s, "-format", "%wx%h" ]
+    args += avail_w ? [ "-size", "#{avail_w}x", "caption:#{text}" ] : [ "label:#{text}" ]
+    args << "info:"
+    out, = Open3.capture2(*args)
     parts = out.strip.split("x").map(&:to_i)
     [ parts[0].to_i, parts[1].to_i ]
   rescue
