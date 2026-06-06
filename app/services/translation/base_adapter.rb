@@ -31,6 +31,10 @@ module Translation
       raise NotImplementedError, "#{self.class}#call is not implemented"
     end
 
+    def translate_bubble_crop(image_bytes, content_type, prompt)
+      raise NotImplementedError, "#{self.class}#translate_bubble_crop is not implemented"
+    end
+
     private
 
     def image_base64
@@ -61,6 +65,7 @@ module Translation
     end
 
     def parse_json(raw)
+      raise "Empty response from API" if raw.nil?
       clean = raw.gsub(/\A```json\s*|\s*```\z/m, "").strip
       JSON.parse(clean)
     end

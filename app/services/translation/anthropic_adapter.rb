@@ -24,5 +24,21 @@ module Translation
     rescue => e
       save_error("Unexpected error: #{e.message}")
     end
+
+    def translate_bubble_crop(image_bytes, content_type, prompt)
+      client = Anthropic::Client.new
+      response = client.messages.create(
+        model:      @job.translation_batch.ai_model,
+        max_tokens: 512,
+        messages: [ {
+          role: "user",
+          content: [
+            { type: "image", source: { type: "base64", media_type: content_type, data: Base64.strict_encode64(image_bytes) } },
+            { type: "text", text: prompt }
+          ]
+        } ]
+      )
+      parse_json(response.content.first.text)
+    end
   end
 end

@@ -66,24 +66,12 @@ class BubbleTranslationService
   end
 
   def call_llm(crop_path)
-    image_data = Base64.strict_encode64(File.binread(crop_path))
-
-    client   = Anthropic::Client.new
-    response = client.messages.create(
-      model:      @batch.ai_model,
-      max_tokens: 512,
-      messages: [ {
-        role:    "user",
-        content: [
-          { type: "image", source: { type: "base64", media_type: "image/png", data: image_data } },
-          { type: "text",  text: PROMPT }
-        ]
-      } ]
-    )
-
-    raw = response.content.first.text
-    clean = raw.gsub(/\A```json\s*|\s*```\z/m, "").strip
-    JSON.parse(clean)
+    image_bytes   = File.binread(crop_path)
+    provider      = @batch.model_provider
+    adapter_class = ImageTranslationService::ADAPTER_MAP.fetch(provider) do
+      raise ArgumentError, "Unknown provider: #{provider}"
+    end
+    adapter_class.new(@job).translate_bubble_crop(image_bytes, "image/png", PROMPT)
   rescue JSON::ParserError
     { "raw_text" => "", "translated_text" => "[JSON parse error]", "notes" => "" }
   end
