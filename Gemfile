@@ -69,7 +69,7 @@ end
 
 gem "onnxruntime"
 gem "mini_magick"
-gem "anthropic", "~> 1.44.0"
+gem "anthropic", "~> 1.46.0"
 gem "ruby-openai"
 gem "faraday"
 
