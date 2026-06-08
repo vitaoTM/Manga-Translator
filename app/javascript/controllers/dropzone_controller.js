@@ -5,16 +5,16 @@ export default class extends Controller {
 
   dragOver(e) {
     e.preventDefault()
-    this.zoneTarget.classList.add("border-amber-400")
+    this.zoneTarget.classList.add("border-violet-500", "bg-violet-500/5")
   }
 
   dragLeave() {
-    this.zoneTarget.classList.remove("border-amber-400")
+    this.zoneTarget.classList.remove("border-violet-500", "bg-violet-500/5")
   }
 
   drop(e) {
     e.preventDefault()
-    this.zoneTarget.classList.remove("border-amber-400")
+    this.zoneTarget.classList.remove("border-violet-500", "bg-violet-500/5")
     const files = e.dataTransfer.files
     if (files.length) {
       this.inputTarget.files = files
@@ -35,10 +35,10 @@ export default class extends Controller {
       const reader = new FileReader()
       reader.onload = (e) => {
         const div = document.createElement("div")
-        div.className = "border border-stone-700"
+        div.className = "border border-zinc-800 rounded overflow-hidden bg-[#0a0a1a]"
         div.innerHTML = `
           <img src="${e.target.result}" class="w-full h-24 object-cover" />
-          <p class="text-xs text-stone-500 p-1 truncate">${file.name}</p>
+          <p class="text-[10px] text-zinc-500 p-1.5 truncate font-mono">${file.name}</p>
         `
         this.previewsTarget.appendChild(div)
       }
