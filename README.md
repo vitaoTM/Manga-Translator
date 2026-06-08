@@ -83,6 +83,20 @@ ollama pull llava       # better quality, ~4.7GB, needs ~8GB free RAM for vision
    - **Compositing** — translated text is rendered back onto the original image using ImageMagick (white ellipse fill + Noto Sans font)
 3. The batch page auto-refreshes via Turbo and shows the rendered output when complete
 
+
+### Examples and prints
+
+<div>
+
+![fig overview](app/assets/images/overview.jpg)
+
+| Raw Japanese | Translated to English |
+| :---: | :---: |
+|![fig 1](app/assets/images/origianl.jpg) | ![fig 2](app/assets/images/translated.jpg) |
+   
+   
+</div>
+
 ## Architecture
 
 ```
