@@ -2,35 +2,32 @@
   <button
     data-action="click->collapsible#toggle"
     class="
-      flex items-center gap-2 text-xs text-stone-500 hover:text-stone-300
-      transition-colors w-full text-left">
-    <span data-collapsible-target="icon" class="transition-transform">▶</span>
-    Speech bubble breakdown (<%= job.speech_bubbles.count %>
-    bubble<%= job.speech_bubbles.count == 1 ? "" : "s" %>)
+      flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-zinc-500 hover:text-zinc-300
+      transition-colors w-full text-left py-2 border-t border-zinc-800/50 mt-4">
+    <span data-collapsible-target="icon" class="transition-transform text-[8px]">▶</span>
+    Speech bubble breakdown (<%= job.speech_bubbles.count %> bubbles)
   </button>
 
-  <div data-collapsible-target="body" class="hidden mt-3 space-y-3">
+  <div data-collapsible-target="body" class="hidden mt-4 space-y-4">
     <% job.speech_bubbles.ordered.each do |bubble| %>
-      <div class="border border-stone-800 p-3 text-xs">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="text-stone-600">#<%= bubble.position + 1 %></span>
-
-          <span class="text-stone-600">
-            conf: <%= (bubble.confidence * 100).round %>%
+      <div class="bg-[#03030b] border border-zinc-800/50 p-4 rounded-lg">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-[10px] font-mono text-zinc-600 font-bold">BUBBLE #<%= bubble.position + 1 %></span>
+          <span class="text-[10px] text-zinc-600 font-bold uppercase tracking-tighter">
+            CONFIDENCE: <span class="<%= bubble.confidence > 0.8 ? 'text-emerald-500' : 'text-amber-500' %>"><%= (bubble.confidence * 100).round %>%</span>
           </span>
         </div>
 
         <% if bubble.raw_text.present? %>
-          <div class="mb-1">
-            <span class="text-stone-500">Original: </span>
-            <span class="text-stone-400"><%= bubble.raw_text %></span>
+          <div class="mb-2 pb-2 border-b border-zinc-800/30">
+            <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block mb-1">ORIGINAL</span>
+            <span class="text-xs text-zinc-400 italic"><%= bubble.raw_text %></span>
           </div>
         <% end %>
 
         <div>
-          <span class="text-stone-500">EN: </span>
-
-          <span class="text-stone-200">
+          <span class="text-[10px] font-bold text-violet-400 uppercase tracking-widest block mb-1">TRANSLATED</span>
+          <span class="text-xs text-zinc-200 font-medium leading-relaxed">
             <%= bubble.translated_text.presence || "(empty)" %>
           </span>
         </div>

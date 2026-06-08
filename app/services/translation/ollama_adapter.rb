@@ -26,5 +26,27 @@ module Translation
     rescue => e
       save_error("Ollama error: #{e.message}. Is Ollama running at #{ENV.fetch('OLLAMA_BASE_URL', 'http://localhost:11434')}?")
     end
+
+    def translate_bubble_crop(image_bytes, content_type, prompt)
+      base_url = ENV.fetch("OLLAMA_BASE_URL", "http://localhost:11434")
+      client = OpenAI::Client.new(
+        access_token: "ollama", uri_base: "#{base_url}/v1/")
+
+      response = client.chat(
+        parameters: {
+          model:      @job.translation_batch.ai_model,
+          max_tokens: 2048,
+          messages: [ {
+            role:    "user",
+            content: [
+              { type: "image_url", image_url: { url: "data:#{content_type};base64,#{Base64.strict_encode64(image_bytes)}" } },
+              { type: "text", text: prompt }
+            ]
+          } ]
+        }
+      )
+
+      parse_json(response.dig("choices", 0, "message", "content"))
+    end
   end
 end

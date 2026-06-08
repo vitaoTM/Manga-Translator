@@ -8,10 +8,10 @@ export default class extends Controller {
 
     this.tabTargets.forEach(tab => {
       const active = tab.dataset.provider === selected
-      tab.classList.toggle("bg-amber-400",   active)
-      tab.classList.toggle("text-stone-950", active)
-      tab.classList.toggle("font-bold",      active)
-      tab.classList.toggle("text-stone-400", !active)
+      tab.classList.toggle("bg-violet-600",  active)
+      tab.classList.toggle("text-white",     active)
+      tab.classList.toggle("shadow-inner",   active)
+      tab.classList.toggle("text-zinc-500",  !active)
     })
 
     this.panelTargets.forEach(panel => {

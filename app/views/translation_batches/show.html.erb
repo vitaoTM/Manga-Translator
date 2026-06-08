@@ -1,21 +1,25 @@
  <div data-controller="batch-poller"
       data-batch-poller-batch-id-value="<%= @batch.id %>"
-      data-batch-poller-completed-value="<%= @batch.status_completed? || @batch.status_failed? %>">
+      data-batch-poller-completed-value="<%= @batch.status_completed? || @batch.status_failed? %>"
+      class="pb-20">
 
-  <div class="flex items-start justify-between mb-8">
+  <div class="flex items-start justify-between mb-12">
     <div>
-      <h1 class="font-['Syne',sans-serif] text-3xl font-black"><%= @batch.title %></h1>
-      <p class="text-stone-500 text-xs mt-1">
-        <%= @jobs.size %> image(s) · <%= @batch.ai_model %> ·
+      <h1 class="text-3xl font-bold text-white mb-2"><%= @batch.title %></h1>
+      <p class="text-zinc-500 text-sm">
+        <%= @jobs.size %> image(s) · <span class="text-violet-400 font-medium"><%= @batch.ai_model %></span> ·
         Created <%= time_ago_in_words(@batch.created_at) %> ago
       </p>
     </div>
-    <span class="text-xs px-3 py-1 border <%= status_badge_classes(@batch.status) %>">
-      <%= @batch.status.upcase %>
-    </span>
+    <div class="flex flex-col items-end gap-2">
+      <span class="text-[10px] font-bold tracking-widest uppercase text-zinc-500">BATCH STATUS</span>
+      <span class="text-xs font-bold px-3 py-1 rounded-full <%= status_badge_classes(@batch.status) %>">
+        <%= @batch.status.upcase %>
+      </span>
+    </div>
   </div>
 
-  <div class="space-y-6">
+  <div class="grid grid-cols-1 gap-12">
     <% @jobs.each do |job| %>
       <%= render "translation_job", job: job %>
     <% end %>

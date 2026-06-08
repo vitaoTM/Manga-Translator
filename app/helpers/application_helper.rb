@@ -1,11 +1,11 @@
 module ApplicationHelper
   def status_badge_classes(status)
     case status.to_s
-    when "pending"    then "border-stone-600 text-stone-500"
-    when "processing" then "border-amber-500 text-amber-400"
-    when "completed"  then "border-green-600 text-green-400"
-    when "failed"     then "border-red-600 text-red-400"
-    else "border-stone-700 text-stone-500"
+    when "pending"    then "bg-zinc-800 text-zinc-400"
+    when "processing" then "bg-violet-900/50 text-violet-300 border border-violet-500/30"
+    when "completed"  then "bg-emerald-900/50 text-emerald-300 border border-emerald-500/30"
+    when "failed"     then "bg-rose-900/50 text-rose-300 border border-rose-500/30"
+    else "bg-zinc-800 text-zinc-500"
     end
   end
 end

@@ -35,6 +35,7 @@ class TranslationBatch < ApplicationRecord
     "ollama" => {
       label: "Ollama (Local)",
       models: [
+        [ "Moondream",        "moondream" ],
         [ "LLaVA",            "llava" ],
         [ "LLaMA 3.2 Vision", "llama3.2-vision" ],
         [ "Gemma3 (vision)",  "gemma3" ],

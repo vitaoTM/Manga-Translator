@@ -6,18 +6,18 @@ export default class extends Controller {
   showOriginal() {
     this.originalViewTarget.classList.remove("hidden")
     this.translatedViewTarget.classList.add("hidden")
-    this.originalBtnTarget.classList.add("border-amber-400", "text-amber-400", "bg-amber-400/10")
-    this.originalBtnTarget.classList.remove("border-stone-600", "text-stone-400")
-    this.translatedBtnTarget.classList.remove("border-amber-400", "text-amber-400", "bg-amber-400/10")
-    this.translatedBtnTarget.classList.add("border-stone-600", "text-stone-400")
+    this.originalBtnTarget.classList.add("border-violet-500", "text-violet-400", "bg-violet-500/10")
+    this.originalBtnTarget.classList.remove("border-zinc-700", "text-zinc-400")
+    this.translatedBtnTarget.classList.remove("border-violet-500", "text-violet-400", "bg-violet-500/10")
+    this.translatedBtnTarget.classList.add("border-zinc-700", "text-zinc-400")
   }
 
   showTranslated() {
     this.translatedViewTarget.classList.remove("hidden")
     this.originalViewTarget.classList.add("hidden")
-    this.translatedBtnTarget.classList.add("border-amber-400", "text-amber-400", "bg-amber-400/10")
-    this.translatedBtnTarget.classList.remove("border-stone-600", "text-stone-400")
-    this.originalBtnTarget.classList.remove("border-amber-400", "text-amber-400", "bg-amber-400/10")
-    this.originalBtnTarget.classList.add("border-stone-600", "text-stone-400")
+    this.translatedBtnTarget.classList.add("border-violet-500", "text-violet-400", "bg-violet-500/10")
+    this.translatedBtnTarget.classList.remove("border-zinc-700", "text-zinc-400")
+    this.originalBtnTarget.classList.remove("border-violet-500", "text-violet-400", "bg-violet-500/10")
+    this.originalBtnTarget.classList.add("border-zinc-700", "text-zinc-400")
   }
 }
