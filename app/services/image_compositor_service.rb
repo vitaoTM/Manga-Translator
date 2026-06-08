@@ -58,6 +58,8 @@ class ImageCompositorService
     text_y = [ cy - text_h / 2, 0 ].max
 
     text_img_path = Rails.root.join("tmp", "text_#{bubble.id}.png").to_s
+    caption_path  = Rails.root.join("tmp", "caption_#{bubble.id}.txt").to_s
+    File.write(caption_path, bubble.translated_text.to_s)
 
     Open3.capture2(
       "magick",
@@ -66,7 +68,7 @@ class ImageCompositorService
       "-fill",       "black",
       "-font",       ML_MODELS[:noto_font],
       "-gravity",    "Center",
-      "caption:#{bubble.translated_text}",
+      "caption:@#{caption_path}",
       text_img_path
     )
 
@@ -81,39 +83,34 @@ class ImageCompositorService
     )
   ensure
     File.delete(text_img_path) if text_img_path && File.exist?(text_img_path)
-  end
-
-  def fit_font_size(text, max_w, max_h)
-    avail_w = max_w - TEXT_PADDING * 2
-    avail_h = max_h - TEXT_PADDING * 2
-    low  = MIN_FONT_SIZE
-    high = MAX_FONT_SIZE
-    best = low
-
-    while low <= high
-      mid = (low + high) / 2
-      _w, h = measure_text(text, mid, avail_w)
-      if h <= avail_h
-        best = mid
-        low  = mid + 1
-      else
-        high = mid - 1
-      end
-    end
-
-    best
+    File.delete(caption_path)  if caption_path  && File.exist?(caption_path)
   end
 
   def measure_text(text, font_size, avail_w = nil)
+    caption_path = Rails.root.join("tmp", "measure_#{SecureRandom.hex(6)}.txt").to_s
+    File.write(caption_path, text.to_s)
     args = [ "magick", "-font", ML_MODELS[:noto_font], "-pointsize", font_size.to_s, "-format", "%wx%h" ]
-    args += avail_w ? [ "-size", "#{avail_w}x", "caption:#{text}" ] : [ "label:#{text}" ]
+    args += avail_w ? [ "-size", "#{avail_w}x", "caption:@#{caption_path}" ] : [ "label:@#{caption_path}" ]
     args << "info:"
     out, = Open3.capture2(*args)
     parts = out.strip.split("x").map(&:to_i)
     [ parts[0].to_i, parts[1].to_i ]
   rescue
     [ 999, 999 ]
+  ensure
+    File.delete(caption_path) if caption_path && File.exist?(caption_path)
   end
+
+  # def measure_text(text, font_size, avail_w = nil)
+  #   args = [ "magick", "-font", ML_MODELS[:noto_font], "-pointsize", font_size.to_s, "-format", "%wx%h" ]
+  #   args += avail_w ? [ "-size", "#{avail_w}x", "caption:#{text}" ] : [ "label:#{text}" ]
+  #   args << "info:"
+  #   out, = Open3.capture2(*args)
+  #   parts = out.strip.split("x").map(&:to_i)
+  #   [ parts[0].to_i, parts[1].to_i ]
+  # rescue
+  #   [ 999, 999 ]
+  # end
 
   def download_image_to_tempfile
     ext  = File.extname(@job.image.blob.filename.to_s).downcase

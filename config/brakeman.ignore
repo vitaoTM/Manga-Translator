@@ -1,0 +1,18 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "fdcd60e3c6e08a169dbdc1e9b422884a7c0e235c2ea1862402f081a684551925",
+      "note": "False positive: caption_path contains only bubble.id (DB integer) and Rails.root-relative path components. No user input reaches this argument."
+    },
+    {
+      "fingerprint": "63f2e8fb07ac91c167d29a3734681bb05ab66dc04edfbf8810fa45e3c87ea195",
+      "note": "False positive: geometry string is built entirely from integer arithmetic on bbox floats. No user input reaches this argument."
+    },
+    {
+      "fingerprint": "d78ea9a969df49e18159aec706bd967ce5d015d3946b923d08f0106477174282",
+      "note": "False positive: args array uses caption:@path where path is SecureRandom.hex + Rails.root. No user input in command arguments."
+    }
+  ],
+  "updated": "2026-06-08 11:10:00 -0300",
+  "brakeman_version": "8.0.4"
+}
