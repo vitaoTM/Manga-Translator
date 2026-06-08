@@ -74,3 +74,5 @@ gem "ruby-openai"
 gem "faraday"
 
 gem "herb", "~> 0.10.1"
+
+gem "rubyzip", "~> 3.3", require: "zip"

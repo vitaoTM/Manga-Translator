@@ -3,7 +3,7 @@ require "open3"
 class ImageCompositorService
   MIN_FONT_SIZE = 8
   MAX_FONT_SIZE = 48
-  TEXT_PADDING  = 4
+  TEXT_PADDING  = 1
 
   def initialize(translation_job)
     @job = translation_job
@@ -49,7 +49,7 @@ class ImageCompositorService
 
     img.combine_options do |c|
       c.fill "white"
-      c.draw "ellipse #{cx},#{cy} #{px[:w] / 2},#{px[:h] / 2} 0,360"
+      c.draw "ellipse #{cx},#{cy} #{(px[:w] / 2 * 0.95).round},#{(px[:h] / 2 * 0.95).round} 0,360"
     end
 
     text_w = [ (px[:w] * 0.70).round, 30 ].max

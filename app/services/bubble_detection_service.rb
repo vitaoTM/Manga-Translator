@@ -93,7 +93,7 @@ class BubbleDetectionService
   end
 
   def postprocess(detections, orig_w, orig_h, pad_info)
-    size  = MODEL_INPUT_SIZE
+    # size  = MODEL_INPUT_SIZE
     scale = pad_info[:scale]
     pad_x = pad_info[:pad_left]
     pad_y = pad_info[:pad_top]

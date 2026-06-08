@@ -27,9 +27,24 @@
       <% end %>
     </div>
 
-    <div class="text-right">
-      <span class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 block mb-1">POSITION</span>
-      <span class="text-sm font-mono text-zinc-400">#<%= job.position + 1 %></span>
+    <div class="flex items-center gap-4">
+      <% if job.rendered_image.attached? %>
+      <%= link_to "↓ Download",
+              rails_blob_path(job.rendered_image, disposition: "attachment"),
+              class: "text-[10px] font-bold tracking-widest uppercase px-3
+                      py-1.5 rounded border border-violet-700 text-violet-400 
+                      hover:border-violet-400 hover:text-violet-200 transition-all" %>
+      <% end %>
+
+      <div class="text-right">
+        <span class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 block mb-1">
+          POSITION
+        </span>
+
+        <span class="text-sm font-mono text-zinc-400">
+          #<%= job.position + 1 %>
+        </span>
+      </div>
     </div>
   </div>
 

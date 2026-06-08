@@ -1,3 +1,5 @@
+require "zip"
+
 class TranslationBatchesController < ApplicationController
   def index
     @batches = TranslationBatch.order(created_at: :desc).includes(:translation_jobs)
@@ -54,5 +56,30 @@ class TranslationBatchesController < ApplicationController
         }
       end
     end
+  end
+
+  def download_all
+    @batch = TranslationBatch
+                .includes(translation_jobs: { rendered_image_attachment: :blob })
+                .find(params[:id])
+
+    jobs_with_images = @batch.translation_jobs.select { |j| j.rendered_image.attached? }
+
+    if jobs_with_images.empty?
+      redirect_to @batch, alert: "No translated images available yet."
+      return
+    end
+
+    zip_data = Zip::OutputStream.write_buffer do |zip|
+      jobs_with_images.each do |job|
+        zip.put_next_entry("page#{job.position + 1}_translated.jpg")
+        zip.write(job.rendered_image.download)
+      end
+    end
+
+    send_data zip_data.string,
+      filename: "#{@batch.title.parameterize}-translated.zip",
+      type:     "application/zip",
+      disposition: "attachment"
   end
 end

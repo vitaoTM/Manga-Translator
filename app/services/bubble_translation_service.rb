@@ -73,7 +73,7 @@ class BubbleTranslationService
     end
     adapter_class.new(@job).translate_bubble_crop(image_bytes, "image/png", PROMPT)
   rescue JSON::ParserError
-    { "raw_text" => "", "translated_text" => "[JSON parse error]", "notes" => "" }
+    { "raw_text" => "", "translated_text" => "", "notes" => "JSON parse error" }
   end
 
   def download_image_to_tempfile
