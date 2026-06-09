@@ -105,6 +105,10 @@
                 <%= job.error_message %>
               </p>
             <% end %>
+          <% elsif job.status_completed? && job.error_message.present? %>
+            <p class="text-sm text-rose-400 font-medium">
+              Error: <%= job.error_message %>
+            </p>
           <% elsif job.status_failed? %>
             <p class="text-sm text-rose-400 font-medium">
               Error: <%= job.error_message %>

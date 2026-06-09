@@ -49,7 +49,7 @@ class ImageCompositorService
 
     img.combine_options do |c|
       c.fill "white"
-      c.draw "ellipse #{cx},#{cy} #{(px[:w] / 2 * 0.95).round},#{(px[:h] / 2 * 0.95).round} 0,360"
+      c.draw "ellipse #{cx},#{cy} #{(px[:w] / 2 * 0.94).round},#{(px[:h] / 2 * 0.94).round} 0,360"
     end
 
     text_w = [ (px[:w] * 0.70).round, 30 ].max

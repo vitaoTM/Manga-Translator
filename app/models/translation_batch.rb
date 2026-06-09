@@ -22,7 +22,8 @@ class TranslationBatch < ApplicationRecord
       models: [
         [ "GPT-4o",       "gpt-4o" ],
         [ "GPT-4o mini",  "gpt-4o-mini" ],
-        [ "GPT-4 Turbo",  "gpt-4-turbo" ]
+        [ "GPT-4 Turbo",  "gpt-4-turbo" ],
+        [ "GPT-5",        "gpt-5" ]
       ]
     },
     "gemini" => {

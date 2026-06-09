@@ -52,7 +52,8 @@ class TranslationBatchesController < ApplicationController
         render json: {
           id:        @batch.id,
           status:    @batch.status,
-          completed: @batch.status_completed? || @batch.status_failed?
+          completed: @batch.status_completed? || @batch.status_failed?,
+          progress:  @batch.translation_jobs.where(status: [ :completed, :failed ]).count
         }
       end
     end
